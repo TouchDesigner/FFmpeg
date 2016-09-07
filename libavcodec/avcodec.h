@@ -1599,11 +1599,6 @@ typedef struct AVPacket {
 
     int64_t pos;                            ///< byte position in stream, -1 if unknown
 
-	// If this is set, then the packet read may go into here instead
-	uint8_t*	customData;
-	int			customDataSize;
-	int			customDataFilled;
-
 #if FF_API_CONVERGENCE_DURATION
     /**
      * @deprecated Same as the duration field, but as int64_t. This was required

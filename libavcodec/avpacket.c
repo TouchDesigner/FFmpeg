@@ -46,10 +46,6 @@ FF_ENABLE_DEPRECATION_WARNINGS
     pkt->buf                  = NULL;
     pkt->side_data            = NULL;
     pkt->side_data_elems      = 0;
-
-	pkt->customData = NULL;
-	pkt->customDataSize = 0;
-	pkt->customDataFilled = 0;
 }
 
 AVPacket *av_packet_alloc(void)

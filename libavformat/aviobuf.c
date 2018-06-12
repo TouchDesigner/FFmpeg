@@ -111,6 +111,8 @@ int ffio_init_context(AVIOContext *s,
     s->update_checksum = NULL;
     s->short_seek_threshold = SHORT_SEEK_THRESHOLD;
 
+	s->possible_frame_packet_read = 0;
+
     if (!read_packet && !write_flag) {
         s->pos     = buffer_size;
         s->buf_end = s->buffer + buffer_size;

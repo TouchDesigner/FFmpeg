@@ -290,7 +290,9 @@ static int append_packet_chunked(AVIOContext *s, AVPacket *pkt, int size)
         if (ret < 0)
             break;
 
+		s->possible_frame_packet_read = 1;
         ret = avio_read(s, pkt->data + prev_size, read_size);
+		s->possible_frame_packet_read = 0;
         if (ret != read_size) {
             av_shrink_packet(pkt, prev_size + FFMAX(ret, 0));
             break;

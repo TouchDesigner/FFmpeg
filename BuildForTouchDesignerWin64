@@ -1,9 +1,0 @@
-#!/bin/bash
-
-export PATH="/home/malcolm/ffmpegBuild2/sandbox/mingw-w64-x86_64/bin:$PATH"
-
-./configure --arch=x86_64 --target-os=mingw32 --cross-prefix=/home/malcolm/ffmpegBuild2/sandbox/mingw-w64-x86_64/bin/x86_64-w64-mingw32- --pkg-config=pkg-config --disable-gpl --disable-static --enable-shared --enable-libmp3lame --enable-version3 --enable-zlib --enable-libvorbis --enable-libtheora --enable-libopenjpeg --disable-w32threads --enable-bzlib --extra-cflags=-DPTW32_STATIC_LIB --enable-libvpx --enable-libilbc --disable-decoder=prores --disable-encoder=prores --disable-decoder=eacmv --disable-decoder=eamad --disable-decoder=eatgq --disable-decoder=eatgv --disable-decoder=eatqi --disable-decoder=bethsoftvid --disable-demuxer=aac --disable-parser=dvdsub --disable-decoder=dvdsub --disable-decoder=prores_lgpl --prefix=$HOME/fflibs64 --enable-iconv --extra-libs=-lstdc++ --extra-libs=-lpng --extra-libs=-loleaut32 --enable-runtime-cpudetect --extra-cflags=
-
-
-make
-make install

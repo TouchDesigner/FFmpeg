@@ -5970,7 +5970,7 @@ enabled libbs2b           && require_pkg_config libbs2b libbs2b bs2b.h bs2b_open
 enabled libcelt           && require libcelt celt/celt.h celt_decode -lcelt0 &&
                              { check_lib libcelt celt/celt.h celt_decoder_create_custom -lcelt0 ||
                                die "ERROR: libcelt must be installed and version must be >= 0.11.0."; }
-enabled libcaca           && require_pkg_config libcaca caca caca.h caca_create_canvas
+enabled libcaca           && require_pkg_config libcaca caca caca.h caca_create_canvas -DCACA_STATIC && add_cppflags -DCACA_STATIC
 enabled libcodec2         && require libcodec2 codec2/codec2.h codec2_create -lcodec2
 enabled libdc1394         && require_pkg_config libdc1394 libdc1394-2 dc1394/dc1394.h dc1394_new
 enabled libdrm            && require_pkg_config libdrm libdrm xf86drm.h drmGetVersion
@@ -5998,7 +5998,7 @@ enabled libkvazaar        && require_pkg_config libkvazaar "kvazaar >= 0.8.1" kv
 # can find the libraries and headers through other means.
 enabled libmfx            && { check_pkg_config libmfx libmfx "mfx/mfxvideo.h" MFXInit ||
                                { require libmfx "mfx/mfxvideo.h" MFXInit "-llibmfx $advapi32_extralibs" && warn "using libmfx without pkg-config"; } }
-enabled libmodplug        && require_pkg_config libmodplug libmodplug libmodplug/modplug.h ModPlug_Load
+enabled libmodplug        && require_pkg_config libmodplug libmodplug libmodplug/modplug.h ModPlug_Load -DMODPLUG_STATIC && add_cppflags -DMODPLUG_STATIC
 enabled libmp3lame        && require "libmp3lame >= 3.98.3" lame/lame.h lame_set_VBR_quality -lmp3lame $libm_extralibs
 enabled libmysofa         && require libmysofa "mysofa.h" mysofa_load -lmysofa $zlib_extralibs
 enabled libnpp            && { check_lib libnpp npp.h nppGetLibVersion -lnppig -lnppicc -lnppc ||
@@ -6037,7 +6037,7 @@ enabled libsrt            && require_pkg_config libsrt "srt >= 1.2.0" srt/srt.h 
 enabled libtesseract      && require_pkg_config libtesseract tesseract tesseract/capi.h TessBaseAPICreate
 enabled libtheora         && require libtheora theora/theoraenc.h th_info_init -ltheoraenc -ltheoradec -logg
 enabled libtls            && require_pkg_config libtls libtls tls.h tls_configure
-enabled libtwolame        && require libtwolame twolame.h twolame_init -ltwolame &&
+enabled libtwolame        && require libtwolame twolame.h twolame_init -ltwolame -DLIBTWOLAME_STATIC && add_cppflags -DLIBTWOLAME_STATIC &&
                              { check_lib libtwolame twolame.h twolame_encode_buffer_float32_interleaved -ltwolame ||
                                die "ERROR: libtwolame must be installed and version must be >= 0.3.10"; }
 enabled libv4l2           && require_pkg_config libv4l2 libv4l2 libv4l2.h v4l2_ioctl

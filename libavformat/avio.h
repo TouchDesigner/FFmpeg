@@ -326,6 +326,11 @@ typedef struct AVIOContext {
     int ignore_boundary_point;
 
     /**
+	 * If set, the read operation is likely reading a frame packet
+	 */
+	int possible_frame_packet_read;
+
+    /**
      * Internal, not meant to be used from outside of AVIOContext.
      */
     enum AVIODataMarkerType current_type;

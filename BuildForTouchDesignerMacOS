@@ -46,7 +46,6 @@ export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"
 --enable-libbs2b \
 --enable-libfreetype \
 --enable-libfribidi \
---enable-libgme \
 --enable-libilbc \
 --enable-libmodplug \
 --enable-libmp3lame \
@@ -298,5 +297,6 @@ export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"
 #--enable-encoder=mpeg2_qsv \
 #--enable-decoder=mpeg2_qsv \
 #--enable-decoder=vp8_qsv \
+#--enable-libgme \
 
 #make #make install

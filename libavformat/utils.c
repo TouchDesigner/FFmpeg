@@ -45,6 +45,8 @@
 #include "internal.h"
 #if CONFIG_NETWORK
 #include "network.h"
+#include "url.h"
+#include <srt/srt.h>
 #endif
 
 #include "libavutil/ffversion.h"
@@ -1307,6 +1309,8 @@ int avformat_network_init(void)
         return ret;
     if ((ret = ff_tls_init()) < 0)
         return ret;
+    if (ret = srt_startup() < 0)
+        return ret;
 #endif
     return 0;
 }
@@ -1314,6 +1318,7 @@ int avformat_network_init(void)
 int avformat_network_deinit(void)
 {
 #if CONFIG_NETWORK
+    srt_cleanup();
     ff_network_close();
     ff_tls_deinit();
 #endif

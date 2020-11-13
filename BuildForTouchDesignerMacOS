@@ -12,14 +12,14 @@ export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"
 --enable-version3 \
 --disable-w32threads \
 --enable-runtime-cpudetect \
---extra-cflags=-I/usr/local/include \
+--extra-cflags="-I/usr/local/include -mmacosx-version-min=10.12" \
 --extra-libs=-lstdc++ \
 --prefix=$HOME/fflibs64 \
 --enable-zlib \
 --enable-bzlib \
 --enable-iconv \
 --extra-libs=-lpng \
---extra-ldflags=-L/usr/local/lib \
+--extra-ldflags="-L/usr/local/lib -mmacosx-version-min=10.12" \
 --disable-debug \
 --disable-doc \
 --disable-htmlpages \

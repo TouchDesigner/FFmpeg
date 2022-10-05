@@ -1,0 +1,3 @@
+#!/bin/sh
+
+./configure --arch=amd64 --disable-stripping --enable-shared --disable-static --disable-doc --enable-debug --disable-optimizations --toolchain=msvc --prefix=/d/devel/ffmpeg/install --enable-libvpx --extra-cflags="-ID:/devel/libvpx -MDd" --extra-ldflags="-LIBPATH:D:/devel/libvpx/x64/Debug" --logfile=log1.log --disable-libsrt --disable-protocol=libsrt --disable-network

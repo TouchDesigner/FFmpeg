@@ -3163,6 +3163,19 @@ void av_fast_padded_mallocz(void *ptr, unsigned int *size, size_t min_size);
 int avcodec_is_open(AVCodecContext *s);
 
 /**
+ * @return a positive value if s is open (i.e. avcodec_open2() was called on it
+ * with no corresponding avcodec_close()), 0 otherwise.
+ */
+int ff_encode_get_frame(AVCodecContext *avctx, AVFrame *frame);
+
+/**
+ * Get a buffer for a packet. This is a wrapper around
+ * AVCodecContext.get_encode_buffer() and should be used instead calling get_encode_buffer()
+ * directly.
+ */
+int ff_get_encode_buffer(AVCodecContext *avctx, AVPacket *avpkt, int64_t size, int flags);
+
+/**
  * @}
  */
 

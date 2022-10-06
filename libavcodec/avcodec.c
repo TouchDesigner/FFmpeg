@@ -716,3 +716,13 @@ int avcodec_is_open(AVCodecContext *s)
 {
     return !!s->internal;
 }
+
+int avcodec_internal_encode_get_frame(AVCodecContext *avctx, AVFrame *frame)
+{
+	return ff_encode_get_frame(avctx, frame);
+}
+
+int avcodec_internal_get_encode_buffer(AVCodecContext *avctx, AVPacket *avpkt, int64_t size, int flags)
+{
+	return ff_get_encode_buffer(avctx, avpkt, size, flags);
+}

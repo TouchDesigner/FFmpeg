@@ -2214,10 +2214,16 @@ static int mov_write_video_tag(AVFormatContext *s, AVIOContext *pb, MOVMuxContex
     }
     avio_wb16(pb, 0); /* Codec stream revision (=0) */
     if (track->mode == MODE_MOV) {
-        ffio_wfourcc(pb, "FFMP"); /* Vendor */
+        if (track->par->codec_id == AV_CODEC_ID_PRORES)
+            ffio_wfourcc(pb, "appl"); /* Vendor */
+		else
+            ffio_wfourcc(pb, "FFMP"); /* Vendor */
         if (track->par->codec_id == AV_CODEC_ID_RAWVIDEO || uncompressed_ycbcr) {
             avio_wb32(pb, 0); /* Temporal Quality */
             avio_wb32(pb, 0x400); /* Spatial Quality = lossless*/
+		} else if (track->par->codec_id == AV_CODEC_ID_PRORES) {
+            avio_wb32(pb, 0); /* Temporal Quality */
+            avio_wb32(pb, 0x3FF); /* Spatial Quality = lossless*/
         } else {
             avio_wb32(pb, 0x200); /* Temporal Quality = normal */
             avio_wb32(pb, 0x200); /* Spatial Quality = normal */

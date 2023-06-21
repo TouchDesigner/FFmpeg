@@ -4396,9 +4396,18 @@ static void build_chunks(MOVTrack *trk)
         return;
     trk->chunkCount = 1;
     for (i = 1; i<trk->entry; i++){
-        if (chunk->pos + chunkSize == trk->cluster[i].pos &&
-            chunkSize + trk->cluster[i].size < (1<<20)){
-            chunkSize             += trk->cluster[i].size;
+        int continueChunk = 0;
+        if (chunk->pos + chunkSize == trk->cluster[i].pos) {
+            if (trk->max_chunk_size) {
+                if (chunkSize + trk->cluster[i].size <= trk->max_chunk_size)
+                    continueChunk = 1;
+            // Default old case before max controls were added
+            } else if (chunkSize + trk->cluster[i].size < (1<<20))
+                continueChunk = 1;
+        }
+
+        if (continueChunk) {
+            chunkSize               += trk->cluster[i].size;
             chunk->samples_in_chunk += trk->cluster[i].entries;
         } else {
             trk->cluster[i].chunkNum = chunk->chunkNum+1;
@@ -7045,6 +7054,7 @@ static int mov_init(AVFormatContext *s)
         MOVTrack *track= &mov->tracks[i];
         AVDictionaryEntry *lang = av_dict_get(st->metadata, "language", NULL,0);
 
+        track->max_chunk_size = 0;
         track->st  = st;
         track->par = st->codecpar;
         track->language = ff_mov_iso639_to_lang(lang?lang->value:"und", mov->mode!=MODE_MOV);
@@ -7125,6 +7135,8 @@ static int mov_init(AVFormatContext *s)
                 if (!track->cover_image)
                     return AVERROR(ENOMEM);
             }
+            if (s->max_chunk_size)
+                track->max_chunk_size = s->max_chunk_size;
         } else if (st->codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
             track->timescale = st->codecpar->sample_rate;
             if (!st->codecpar->frame_size && !av_get_bits_per_sample(st->codecpar->codec_id)) {
@@ -7175,6 +7187,8 @@ static int mov_init(AVFormatContext *s)
                     return AVERROR_EXPERIMENTAL;
                 }
             }
+            if (s->max_chunk_size)
+                track->max_chunk_size = s->max_chunk_size;
         } else if (st->codecpar->codec_type == AVMEDIA_TYPE_SUBTITLE) {
             track->timescale = st->time_base.den;
 

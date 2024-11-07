@@ -2634,10 +2634,16 @@ static int mov_write_video_tag(AVFormatContext *s, AVIOContext *pb, MOVMuxContex
     }
     avio_wb16(pb, 0); /* Codec stream revision (=0) */
     if (track->mode == MODE_MOV) {
-        ffio_wfourcc(pb, "FFMP"); /* Vendor */
+        if (track->par->codec_id == AV_CODEC_ID_PRORES)
+            ffio_wfourcc(pb, "appl"); /* Vendor */
+		else
+            ffio_wfourcc(pb, "FFMP"); /* Vendor */
         if (track->par->codec_id == AV_CODEC_ID_RAWVIDEO || uncompressed_ycbcr) {
             avio_wb32(pb, 0); /* Temporal Quality */
             avio_wb32(pb, 0x400); /* Spatial Quality = lossless*/
+		} else if (track->par->codec_id == AV_CODEC_ID_PRORES) {
+            avio_wb32(pb, 0); /* Temporal Quality */
+            avio_wb32(pb, 0x3FF); /* Spatial Quality = lossless*/
         } else {
             avio_wb32(pb, 0x200); /* Temporal Quality = normal */
             avio_wb32(pb, 0x200); /* Spatial Quality = normal */
@@ -4897,9 +4903,18 @@ static void build_chunks(MOVTrack *trk)
         return;
     trk->chunkCount = 1;
     for (i = 1; i<trk->entry; i++){
-        if (chunk->pos + chunkSize == trk->cluster[i].pos &&
-            chunkSize + trk->cluster[i].size < (1<<20)){
-            chunkSize             += trk->cluster[i].size;
+        int continueChunk = 0;
+        if (chunk->pos + chunkSize == trk->cluster[i].pos) {
+            if (trk->max_chunk_size) {
+                if (chunkSize + trk->cluster[i].size <= trk->max_chunk_size)
+                    continueChunk = 1;
+            // Default old case before max controls were added
+            } else if (chunkSize + trk->cluster[i].size < (1<<20))
+                continueChunk = 1;
+        }
+
+        if (continueChunk) {
+            chunkSize               += trk->cluster[i].size;
             chunk->samples_in_chunk += trk->cluster[i].entries;
         } else {
             trk->cluster[i].chunkNum = chunk->chunkNum+1;
@@ -7867,6 +7882,7 @@ static int mov_init(AVFormatContext *s)
             continue;
 
         if (!track->st) {
+			track->max_chunk_size = 0;
             track->st  = st;
             track->par = st->codecpar;
         }
@@ -7949,6 +7965,8 @@ static int mov_init(AVFormatContext *s)
                 if (!track->cover_image)
                     return AVERROR(ENOMEM);
             }
+            if (s->max_chunk_size)
+                track->max_chunk_size = s->max_chunk_size;
         } else if (st->codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
             track->timescale = st->codecpar->sample_rate;
             if (!st->codecpar->frame_size && !av_get_bits_per_sample(st->codecpar->codec_id)) {
@@ -7999,6 +8017,8 @@ static int mov_init(AVFormatContext *s)
                     return AVERROR_EXPERIMENTAL;
                 }
             }
+            if (s->max_chunk_size)
+                track->max_chunk_size = s->max_chunk_size;
         } else if (st->codecpar->codec_type == AVMEDIA_TYPE_SUBTITLE) {
             track->timescale = st->time_base.den;
 

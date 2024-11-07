@@ -140,6 +140,7 @@ typedef struct MOVTrack {
     HintSampleQueue sample_queue;
     AVPacket *cover_image;
 
+    int         max_chunk_size;
     AVIOContext *mdat_buf;
     int64_t     data_offset;
     int         frag_discont;

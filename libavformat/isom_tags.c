@@ -244,6 +244,8 @@ const AVCodecTag ff_codec_movvideo_tags[] = {
     { AV_CODEC_ID_HAP, MKTAG('H', 'a', 'p', 'Y') },
     { AV_CODEC_ID_HAP, MKTAG('H', 'a', 'p', 'A') },
     { AV_CODEC_ID_HAP, MKTAG('H', 'a', 'p', 'M') },
+    { AV_CODEC_ID_HAP, MKTAG('H', 'a', 'p', '7') },
+    { AV_CODEC_ID_HAP, MKTAG('H', 'a', 'p', 'H') },
 
     { AV_CODEC_ID_DXV, MKTAG('D', 'X', 'D', '3') },
     { AV_CODEC_ID_DXV, MKTAG('D', 'X', 'D', 'I') },
